@@ -1,0 +1,26 @@
+CoursePeer Sample PHP Application
+
+This application uses one of the open source implementations for OAuth 2.0 (http://oauth.net/2/) on PHP.
+This example uses CodeIgniter (http://codeigniter.com). However, you don't need to have any experience 
+using CodeIgniter to start using this sample app. Also, this sample includes the core graph library that
+is already configured to work with CoursePeer's OAuth 2.0 server.
+----------------------------------------------------------------------------------------------------------
+
+To start using this sample, you need to implement the following steps:
+
+- Aquire your CoursePeer Application's APP_KEY and APP_SECRET. To get these, please send an email to 
+  support@coursepeer.com and list the following details:
+	* Application Name
+	* Callback (redirect) URL - note that if you are using this sample application,
+		then 'http://SITE_HOST/CP_APP_PATH/graph/index.php/signin/redirect'
+		should be your Callback URL, where your own site host (i.e. domain name OR 
+		IP Address of the hosting server), and CP_APP_PATH is the full path (if any), 
+		where the files and folders reside on your server.
+	* Developer’s Email Address
+	* MiniFrame URL (optional)
+	* Developer’s Website (optional).
+- Create a new database and then execute the SQL statements available inside the 'coursepeer_app.sql' file.
+- Edit the first chunk of constants in the file "graph\application\config\constants.php". Comments are self explanatory in that file.
+- Edit 'index.php' to whatever that suits your needs.
+- (OPTIONAL) Edit 'graph\application\controllers\signin.php' to suit your needs. Comments are self explanatory in that file.
+- Test! (access in your browser: http://SITE_HOST/CP_APP_PATH)
