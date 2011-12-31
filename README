@@ -1,0 +1,5 @@
+Here you can find different samples, using different coding languages, implementing the CoursePeer Knowledge Graph API.
+These sample applications can be used as-is to act as the core of a new CoursePeer Application.
+
+Please note that other OAuth 2.0 client implementations, such as ASP.NET (http://dotnetopenauth.net), although not prepared to work with CoursePeer directly yet are available at: http://oauth.net/code/
+Those client implementations will require additional information to setup, and such information is included in our CoursePeer Knowledge Graph API Developers Page: http://graph.coursepeer.com/developers
