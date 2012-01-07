@@ -1,6 +1,6 @@
 CoursePeer Sample C Application
 
-This application is a sample implementation of the OAuth 2.0 (http://oauth.net/2/) on C.
+This application is a sample implementation of the OAuth 2.0 (http://oauth.net/2/) in C.
 This sample includes the core graph library that is already configured to work with 
 CoursePeer's OAuth 2.0 server. Instructions are available for both Unix-like and Windows 
 Operating Systems.
@@ -8,23 +8,23 @@ Operating Systems.
 
 To start using this sample, you need to implement the following steps:
 
-- Aquire your CoursePeer Application's APP_KEY and APP_SECRET. To get these, please send an email to 
+- Acquire your CoursePeer Application's APP_KEY and APP_SECRET. To get these, please send an email to 
   support@coursepeer.com and list the following details:
 	* Application Name
 	* If your application has a web based version, provide the Callback (redirect) URL
 		Note that if your application is only a Desktop application, then please note that in your email to support@coursepeer.com
-	* Developer’s Email Address
+	* Developer's Email Address
 	* MiniFrame URL (optional, and again only if there is a web version of your application)
-	* Developer’s Website (optional).
-- Edit the first chunk of constants in the file "cpgraph.c". Comments are self explanatory in that file.
+	* Developer's Website (optional).
+- Edit the first chunk of constants in the file "cpgraph.c". Comments are self-explanatory in that file.
 - Edit 'main.c' to whatever that suits your needs. It is the application itself.
 - If you are compiling and running on a Unix-like machine: 
-	- Then no need to do anything with the "windows_additional_files"; delete the folder.
+	- Then no need to do anything with the "windows_additional_files"; delete the directory.
 	- The following steps are required if you don't have 'libcurl' (cURL library) installed on your machine
 		* Type "su" in terminal to access as a root user (if you are not already) before performing any of the following.
 		* Type in terminal:
 			sudo apt-get install libcurl4-gnutls-dev
-	- The following steps are required if you don't have 'jansson' (JSON manupilation library) installed on your machine
+	- The following steps are required if you don't have 'jansson' (JSON manipulation library) installed on your machine
 		* Type "su" in terminal to access as a root user (if you are not already) before performing any of the following.
 		* Type in terminal:
 			sudo apt-get install libjansson-dev
@@ -34,9 +34,9 @@ To start using this sample, you need to implement the following steps:
 		gcc main.c cpgraph.c -g -o main -lcurl -ljansson
 		* If you face error saying "error while loading shared libraries: libjansson.so.4: cannot open shared object file: No such file or directory"
 			Then you can try to run the following command as root ("su"): ldconfig
-	- Test the applicaftion by executing the 'main' file:
+	- Test the application by executing the 'main' file:
 		./main
-- If you are compiling and running on a non-Unix-like (eg. Windows) machine: 
+- If you are compiling and running on a Windows machine: 
 	- Move the content of the "windows_additional_files" one directory up (i.e. 'ccpgraph.sln' should be in the same folder of 'main.c')
 	- Start the 'ccpgraph.sln' file, make sure you are in "Release" mode, and then Compile and Build the executable.
-	- Test the applicaftion by executing the 'ccpgraph.exe' file in command-line.
+	- Test the application by executing the 'ccpgraph.exe' file in command-line.
