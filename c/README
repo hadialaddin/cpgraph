@@ -1,6 +1,6 @@
 CoursePeer Sample C Application
 
-This application is a sample implementation of the OAuth 2.0 (http://oauth.net/2/) on C.
+This application is a sample implementation of the OAuth 2.0 (http://oauth.net/2/) in C.
 This sample includes the core graph library that is already configured to work with 
 CoursePeer's OAuth 2.0 server. Instructions are available for both Unix-like and Windows 
 Operating Systems.
