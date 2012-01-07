@@ -19,7 +19,7 @@ To start using this sample, you need to implement the following steps:
 - Edit the first chunk of constants in the file "cpgraph.c". Comments are self-explanatory in that file.
 - Edit 'main.c' to whatever that suits your needs. It is the application itself.
 - If you are compiling and running on a Unix-like machine: 
-	- Then no need to do anything with the "windows_additional_files"; delete the directory.
+	- Then no need to do anything with the "windows_additional_files" and "windows_required_libs_source_files"; delete the two directories.
 	- The following steps are required if you don't have 'libcurl' (cURL library) installed on your machine
 		* Type "su" in terminal to access as a root user (if you are not already) before performing any of the following.
 		* Type in terminal:
@@ -39,4 +39,5 @@ To start using this sample, you need to implement the following steps:
 - If you are compiling and running on a Windows machine: 
 	- Move the content of the "windows_additional_files" one directory up (i.e. 'ccpgraph.sln' should be in the same folder of 'main.c')
 	- Start the 'ccpgraph.sln' file, make sure you are in "Release" mode, and then Compile and Build the executable.
+		* If for some reason Microsoft Visual Studio complained it didn't link any of the libraries 'libcurl.lib' or 'libjansson.lib', you will need to use the source files to recompile these two libraries using your version of Microsoft Visual Studio. The 'windows_required_libs_source_files' directory contains the required project file and source files, that you can open on your Microsoft Visual Studio to compile under "Release" mode. Then, take the 'libjansson.lib' from the 'Release' directory and replace the older one that you copied previously from 'windows_additional_files'.
 	- Test the application by executing the 'ccpgraph.exe' file in command-line.
