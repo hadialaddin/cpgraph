@@ -171,7 +171,7 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
 
 	access_token_json = json_loads(access_token_response.memory, 0, &json_error);
 
-	if(!access_token_json){
+	if (!access_token_json) {
 		// Something went wrong with the authorization server. Please try again later.
 		snprintf(error, error_len, "Something went wrong with the authorization server. Please try again later.");
 		return 1;
