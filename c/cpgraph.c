@@ -80,7 +80,7 @@ static size_t write_memory_callback(const void *contents, size_t size, size_t nm
  * passed return_access_token char array.
  * Returns 1 if failed, and 0 if succeeded.
  */
-int request_access_token(char *returned_access_token, const char *email, const char *password, char *error)
+int request_access_token(char *returned_access_token, size_t returned_access_token_len, const char *email, const char *password, char *error, size_t error_len)
 {
 	// This function goes to the CoursePeer server, grabs a code
 	// then returns back, to resend it and get an access_token.
@@ -134,7 +134,7 @@ int request_access_token(char *returned_access_token, const char *email, const c
 
 	if (strcmp("authentication_failed", code.memory) == 0) {
 		// Authentication Failed
-		strcpy(error, "Authentication Failure. The provided Email and Password are incorrect.");
+		snprintf(error, error_len, "Authentication Failure. The provided Email and Password are incorrect.");
 		return 1; // Failed to authenticate user credentials
 	}
 	// Now, our code.memory points to a memory block that is code.size
@@ -173,7 +173,7 @@ int request_access_token(char *returned_access_token, const char *email, const c
 
 	if(!access_token_json){
 		// Something went wrong with the authorization server. Please try again later.
-		strcpy(error, "Something went wrong with the authorization server. Please try again later.");
+		snprintf(error, error_len, "Something went wrong with the authorization server. Please try again later.");
 		return 1;
 	}
 
@@ -190,16 +190,16 @@ int request_access_token(char *returned_access_token, const char *email, const c
 	// return error code
 	if (access_token && json_is_string(access_token)) {
 		// Pointer is value until we do the next name refresh
-		strcpy(returned_access_token, json_string_value(access_token));
+		snprintf(returned_access_token, returned_access_token_len, json_string_value(access_token));
 		return 0;
     }
 
     // Something went wrong, return error code
-    strcpy(error, "Something went wrong. Try again later.");
+    snprintf(error, error_len, "Something went wrong. Try again later.");
     return 1;
 }
 
-int cp_api_method(char * result, char * method, char * access_token, char * error){
+int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len) {
 	struct MemoryStruct call_result;
 	char cp_api_method_url[1000];
 	struct curl_httppost *post = NULL;
@@ -238,7 +238,7 @@ int cp_api_method(char * result, char * method, char * access_token, char * erro
 	/* cleanup curl stuff */ 
 	curl_easy_cleanup(curl_handle);
 
-	strcpy(result,call_result.memory);
+	snprintf(result, result_len, call_result.memory);
 
 	return 0;
 }

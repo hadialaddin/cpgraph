@@ -28,7 +28,8 @@ int main() {
 	/* Will use this variable to store the result of the
 	 * CoursePeer API method call.
 	 */
-	char* cp_method_result = malloc(1000000);
+    const size_t CP_METHOD_RESULT_LEN = 1000000;
+	char* cp_method_result = malloc(CP_METHOD_RESULT_LEN);
     assert(cp_method_result);
 
 	// Prompt user to input CoursePeer Account credentials
@@ -44,7 +45,7 @@ int main() {
       password[strlen(password) - 1] = 0;
 
 	// Aquire the access_token from the CoursePeer server
-	access_token_result = request_access_token(returned_access_token, email, password, error);
+	access_token_result = request_access_token(returned_access_token, sizeof(returned_access_token), email, password, error, sizeof(error));
 
 	// Check if the returned value is 0 (failed)
 	if(access_token_result == 1) {
@@ -70,42 +71,42 @@ int main() {
 
     // User Profile
     printf("\n#########################\nUser Profile:\n");
-    cp_api_method(cp_method_result, "/users/me/profile", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/profile", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Courses
     printf("\n#########################\nUser Courses:\n");
-    cp_api_method(cp_method_result, "/users/me/courses", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/courses", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Questions
     printf("\n#########################\nUser Questions:\n");
-    cp_api_method(cp_method_result, "/users/me/questions", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/questions", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Bookmarks
     printf("\n#########################\nUser Bookmarks:\n");
-    cp_api_method(cp_method_result, "/users/me/bookmarks", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/bookmarks", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Tips
     printf("\n#########################\nUser Tips:\n");
-    cp_api_method(cp_method_result, "/users/me/tips", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/tips", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
     
     // User Life Activities/Places
     printf("\n#########################\nUser Life Activities/Places:\n");
-    cp_api_method(cp_method_result, "/users/me/life", returned_access_token, error);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/life", returned_access_token, error, sizeof(error));
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
