@@ -8,32 +8,33 @@
  ***************************************************************************/ 
 
 // YOU MUST MODIFY THESE DEFINITIONS TO SUIT YOUR APPLICATION
-#define CP_APP_KEY "PUT YOUR APP_KEY HERE"
-#define CP_APP_SECRET "PUT YOUR APP_SECRET HERE"
+const char CP_APP_KEY[] = "mepeer";
+const char CP_APP_SECRET[] = "mepeer";
 
 // DO NOT MODIFY ANYTHING BELOW THIS LINE
-#define CP_APP_REDIRECT_URI "libcurl"
+const char CP_APP_REDIRECT_URI[] = "libcurl";
 
-#define CP_AUTHORIZE_SERVER "http://graph.coursepeer.com/index.php/oauth/"
-#define CP_ACCESS_TOKEN_GRANT_SERVER "http://graph.coursepeer.com/index.php/oauth/access_token/"
-#define CP_METHOD_DATA_SERVER "http://graph.coursepeer.com/index.php/data"
+const char CP_AUTHORIZE_SERVER[] = "http://graph.coursepeer.com/index.php/oauth/";
+const char CP_ACCESS_TOKEN_GRANT_SERVER[] = "http://graph.coursepeer.com/index.php/oauth/access_token/";
+const char CP_METHOD_DATA_SERVER[] = "http://graph.coursepeer.com/index.php/data";
 
-#define CP_REQUEST_CODE_URI_STARTER "?response_type=code&scope=basic"
-#define CP_REQUEST_CODE_URI_CLIENTID "&client_id="
-#define CP_REQUEST_CODE_URI_REDIRECT_URI "&redirect_uri="
-#define CP_REQUEST_CODE_URI_EMAIL "&email="
-#define CP_REQUEST_CODE_URI_PASSWORD "&password="
-#define CP_REQUEST_CODE_URI_DESKTOP "&desktop=1"
+const char CP_REQUEST_CODE_URI_STARTER[] = "?response_type=code&scope=basic";
+const char CP_REQUEST_CODE_URI_CLIENTID[] = "&client_id=";
+const char CP_REQUEST_CODE_URI_REDIRECT_URI[] = "&redirect_uri=";
+const char CP_REQUEST_CODE_URI_EMAIL[] = "&email=";
+const char CP_REQUEST_CODE_URI_PASSWORD[] = "&password=";
+const char CP_REQUEST_CODE_URI_DESKTOP[] = "&desktop=1";
 
-#define CP_ACCESS_TOKEN_URI_STARTER "?grant_type=authorization_code"
-#define CP_ACCESS_TOKEN_URI_CLIENTID "&client_id="
-#define CP_ACCESS_TOKEN_URI_CLIENTSECRET "&client_secret="
-#define CP_ACCESS_TOKEN_URI_REDIRECT_URI "&redirect_uri="
-#define CP_ACCESS_TOKEN_URI_CODE "&code="
-#define CP_ACCESS_TOKEN_URI_DESKTOP "&desktop=1"
+const char CP_ACCESS_TOKEN_URI_STARTER[] = "?grant_type=authorization_code";
+const char CP_ACCESS_TOKEN_URI_CLIENTID[] = "&client_id=";
+const char CP_ACCESS_TOKEN_URI_CLIENTSECRET[] = "&client_secret=";
+const char CP_ACCESS_TOKEN_URI_REDIRECT_URI[] = "&redirect_uri=";
+const char CP_ACCESS_TOKEN_URI_CODE[] = "&code=";
+const char CP_ACCESS_TOKEN_URI_DESKTOP[] = "&desktop=1";
 
-#define CP_METHOD_DATA_ACCESS_TOKEN "?access_token="
+const char CP_METHOD_DATA_ACCESS_TOKEN[] = "?access_token=";
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -55,38 +56,37 @@ CURL *curl_handle; // cURL handler to do the connections
 /* Function used as a callback for the cURL;
  * gets executed when it returns back from the call.
  */
-WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp)
+static size_t write_memory_callback(const void *contents, size_t size, size_t nmemb, void *userp)
 {
-	size_t realsize = size * nmemb;
+	const size_t realsize = size * nmemb;
 	struct MemoryStruct *mem = (struct MemoryStruct *)userp;
-	 
+
 	mem->memory = realloc(mem->memory, mem->size + realsize + 1);
 	if (mem->memory == NULL) {
 		/* out of memory! */ 
-		printf("not enough memory (realloc returned NULL)\n");
+		fprintf(stderr, "Not enough memory (realloc returned NULL)\n");
 		exit(EXIT_FAILURE);
 	}
-	 
+
 	memcpy(&(mem->memory[mem->size]), contents, realsize);
 	mem->size += realsize;
 	mem->memory[mem->size] = 0;
-	 
+
 	return realsize;
 }
  
 /* 
  * Places the access_token value in the
  * passed return_access_token char array.
- * Returns 1 if failed, and 0 if success.
+ * Returns 1 if failed, and 0 if succeeded.
  */
-int request_access_token(char * returned_access_token, char * email, char * password, char * error)
+int request_access_token(char *returned_access_token, const char *email, const char *password, char *error)
 {
 	// This function goes to the CoursePeer server, grabs a code
 	// then returns back, to resend it and get an access_token.
 	// Once access token is aquired, it stores it in 'token.txt'
 	// file in the same directory of the executable, for future
 	// retrieval.
-
 	struct MemoryStruct code;
 	struct MemoryStruct access_token_response;
 	char cp_code_url[1000];
@@ -95,12 +95,13 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	json_t *access_token_json;
 	json_error_t json_error;
 	json_t *access_token;
-	json_t *access_token_value;
 	 
-	code.memory = malloc(1);  /* will be grown as needed by the realloc above */ 
+	code.memory = malloc(1);  /* will be grown as needed by the realloc above */
+    assert(code.memory);
 	code.size = 0;    /* no data at this point */ 
 
 	access_token_response.memory = malloc(1);  /* will be grown as needed by the realloc above */ 
+    assert(access_token_response.memory);
 	access_token_response.size = 0;    /* no data at this point */ 
 	 
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -108,13 +109,15 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	/* init the curl session */ 
 	curl_handle = curl_easy_init();
 
-	sprintf(cp_code_url,"%s%s%s%s%s%s%s%s%s%s%s%s",CP_AUTHORIZE_SERVER,CP_REQUEST_CODE_URI_STARTER,CP_REQUEST_CODE_URI_CLIENTID,CP_APP_KEY,CP_REQUEST_CODE_URI_REDIRECT_URI,CP_APP_REDIRECT_URI,CP_REQUEST_CODE_URI_EMAIL,email,CP_REQUEST_CODE_URI_PASSWORD,password,CP_REQUEST_CODE_URI_DESKTOP,"\n");
+	snprintf(cp_code_url, sizeof(cp_code_url), "%s%s%s%s%s%s%s%s%s%s%s%s\n", CP_AUTHORIZE_SERVER, CP_REQUEST_CODE_URI_STARTER, CP_REQUEST_CODE_URI_CLIENTID,
+        CP_APP_KEY, CP_REQUEST_CODE_URI_REDIRECT_URI, CP_APP_REDIRECT_URI, CP_REQUEST_CODE_URI_EMAIL, email, CP_REQUEST_CODE_URI_PASSWORD,
+        password, CP_REQUEST_CODE_URI_DESKTOP);
 	
-/* specify URL to get authorization code */ 
+    /* specify URL to get authorization code */
 	curl_easy_setopt(curl_handle, CURLOPT_URL, cp_code_url);
 	 
 	/* send all data to this function  */ 
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_memory_callback);
 	 
 	/* we pass our 'code' struct to the callback function */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&code);
@@ -129,7 +132,7 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	/* cleanup curl stuff */ 
 	curl_easy_cleanup(curl_handle);
 
-	if(strcmp("authentication_failed",code.memory)==0){
+	if (strcmp("authentication_failed", code.memory) == 0) {
 		// Authentication Failed
 		strcpy(error, "Authentication Failure. The provided Email and Password are incorrect.");
 		return 1; // Failed to authenticate user credentials
@@ -138,9 +141,11 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	// bytes big and contains the CoursePeer Code. Next, is to exchange
 	// this code for an access_token.
 
-	sprintf(access_token_granting_url,"%s%s%s%s%s%s%s%s%s%s%s",CP_ACCESS_TOKEN_GRANT_SERVER,CP_ACCESS_TOKEN_URI_STARTER,CP_ACCESS_TOKEN_URI_CLIENTID,CP_APP_KEY,CP_ACCESS_TOKEN_URI_CLIENTSECRET,CP_APP_SECRET,CP_ACCESS_TOKEN_URI_REDIRECT_URI,CP_APP_REDIRECT_URI,CP_ACCESS_TOKEN_URI_CODE,code.memory,CP_ACCESS_TOKEN_URI_DESKTOP);
+	snprintf(access_token_granting_url, sizeof(access_token_granting_url), "%s%s%s%s%s%s%s%s%s%s%s", CP_ACCESS_TOKEN_GRANT_SERVER, CP_ACCESS_TOKEN_URI_STARTER,
+        CP_ACCESS_TOKEN_URI_CLIENTID, CP_APP_KEY, CP_ACCESS_TOKEN_URI_CLIENTSECRET, CP_APP_SECRET, CP_ACCESS_TOKEN_URI_REDIRECT_URI, CP_APP_REDIRECT_URI,
+        CP_ACCESS_TOKEN_URI_CODE, code.memory, CP_ACCESS_TOKEN_URI_DESKTOP);
 
-	 curl_global_init(CURL_GLOBAL_ALL);
+    curl_global_init(CURL_GLOBAL_ALL);
 	 
 	/* init the curl session */ 
 	curl_handle = curl_easy_init();
@@ -149,7 +154,7 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	curl_easy_setopt(curl_handle, CURLOPT_URL, access_token_granting_url);
 	 
 	/* send all data to this function  */ 
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_memory_callback);
 	 
 	/* we pass our 'code' struct to the callback function */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&access_token_response);
@@ -175,11 +180,8 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 	access_token = json_object_get(access_token_json, "access_token");
 
 	// Keep memory clean before we return
-	if(code.memory)
-		free(code.memory);
-
-	if(access_token_response.memory)
-		free(access_token_response.memory);
+    free(code.memory);
+    free(access_token_response.memory);
  
 	/* we're done with libcurl, so clean it up */ 
 	curl_global_cleanup();
@@ -190,22 +192,20 @@ int request_access_token(char * returned_access_token, char * email, char * pass
 		// Pointer is value until we do the next name refresh
 		strcpy(returned_access_token, json_string_value(access_token));
 		return 0;
-	}
-	else{
-		// Something went wrong, return error code
-		strcpy(error, "Something went wrong. Try again later.");
-		return 1;
-	}
+    }
 
+    // Something went wrong, return error code
+    strcpy(error, "Something went wrong. Try again later.");
+    return 1;
 }
 
 int cp_api_method(char * result, char * method, char * access_token, char * error){
-
 	struct MemoryStruct call_result;
 	char cp_api_method_url[1000];
-	struct curl_httppost *post=NULL;
+	struct curl_httppost *post = NULL;
 
 	call_result.memory = malloc(1);  /* will be grown as needed by the realloc above */ 
+    assert(call_result.memory);
 	call_result.size = 0;    /* no data at this point */ 
 
 	curl_global_init(CURL_GLOBAL_ALL);
@@ -213,7 +213,8 @@ int cp_api_method(char * result, char * method, char * access_token, char * erro
 	/* init the curl session */ 
 	curl_handle = curl_easy_init();
 
-	sprintf(cp_api_method_url,"%s%s%s%s",CP_METHOD_DATA_SERVER,method,CP_METHOD_DATA_ACCESS_TOKEN,access_token);
+	snprintf(cp_api_method_url, sizeof(cp_api_method_url), "%s%s%s%s", CP_METHOD_DATA_SERVER,
+        method, CP_METHOD_DATA_ACCESS_TOKEN, access_token);
 	
 	/* specify URL to get authorization code */ 
 	curl_easy_setopt(curl_handle, CURLOPT_URL, cp_api_method_url);
@@ -222,7 +223,7 @@ int cp_api_method(char * result, char * method, char * access_token, char * erro
 	curl_easy_setopt(curl_handle, CURLOPT_HTTPPOST, post);
  
 	/* send all data to this function  */ 
-	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
+	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_memory_callback);
 	 
 	/* we pass our 'code' struct to the callback function */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&call_result);

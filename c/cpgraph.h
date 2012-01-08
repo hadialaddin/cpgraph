@@ -8,22 +8,18 @@
  ***************************************************************************/ 
 #ifndef CPGRAPH_H
 #define CPGRAPH_H
-
-#include <stdio.h>
-#include <stdlib.h> 
-#include <stdarg.h>
  
 /* Function used as a callback for the cURL;
  * gets executed when it returns back from the call.
  */
-static size_t WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp);
+static size_t write_memory_callback(const void *contents, size_t size, size_t nmemb, void *userp);
 
 /* 
  * Places the access_token value in the
  * passed 'return_access_token' char array.
  * Returns 1 if failed, and 0 if success.
  */
-int request_access_token(char * returned_access_token, char * email, char * password, char * error);
+int request_access_token(char *returned_access_token, char *email, char *password, char *error);
 
 /* 
  * Executes the CoursePeer API Call for 
@@ -31,6 +27,6 @@ int request_access_token(char * returned_access_token, char * email, char * pass
  * The result is stored in 'result'.
  * Returns 1 if failed, and 0 if success.
  */
-int cp_api_method(char * result, char * method, char * access_token, char * error);
+int cp_api_method(char *result, char *method, char *access_token, char *error);
 
 #endif
