@@ -8,8 +8,8 @@
  ***************************************************************************/ 
 
 // YOU MUST MODIFY THESE DEFINITIONS TO SUIT YOUR APPLICATION
-const char CP_APP_KEY[] = "mepeer";
-const char CP_APP_SECRET[] = "mepeer";
+const char CP_APP_KEY[] = "PUT YOUR APP_KEY HERE";
+const char CP_APP_SECRET[] = "PUT YOUR APP_SECRET HERE";
 
 // DO NOT MODIFY ANYTHING BELOW THIS LINE
 const char CP_APP_REDIRECT_URI[] = "libcurl";
@@ -109,7 +109,7 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
 	/* init the curl session */ 
 	curl_handle = curl_easy_init();
 
-	snprintf(cp_code_url, sizeof(cp_code_url), "%s%s%s%s%s%s%s%s%s%s%s%s\n", CP_AUTHORIZE_SERVER, CP_REQUEST_CODE_URI_STARTER, CP_REQUEST_CODE_URI_CLIENTID,
+	snprintf(cp_code_url, sizeof(cp_code_url), "%s%s%s%s%s%s%s%s%s%s%s\n", CP_AUTHORIZE_SERVER, CP_REQUEST_CODE_URI_STARTER, CP_REQUEST_CODE_URI_CLIENTID,
         CP_APP_KEY, CP_REQUEST_CODE_URI_REDIRECT_URI, CP_APP_REDIRECT_URI, CP_REQUEST_CODE_URI_EMAIL, email, CP_REQUEST_CODE_URI_PASSWORD,
         password, CP_REQUEST_CODE_URI_DESKTOP);
 	
