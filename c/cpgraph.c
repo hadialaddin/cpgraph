@@ -53,8 +53,7 @@ struct MemoryStruct {
 CURL *curl_handle; // cURL handler to do the connections
 CURLcode res;
 
-static size_t write_memory_callback(const void *contents, size_t size, size_t nmemb, void *userp)
-{
+static size_t write_memory_callback(const void *contents, size_t size, size_t nmemb, void *userp) {
 	const size_t realsize = size * nmemb;
 	struct MemoryStruct *mem = (struct MemoryStruct *)userp;
 
@@ -73,8 +72,7 @@ static size_t write_memory_callback(const void *contents, size_t size, size_t nm
 }
 
 int request_access_token(char *returned_access_token, size_t returned_access_token_len,
-                         const char *email, const char *password, char *error, size_t error_len)
-{
+                         const char *email, const char *password, char *error, size_t error_len) {
 	// This function goes to the CoursePeer server, grabs a code
 	// then returns back, to resend it and get an access_token.
 	// Once access token is aquired, it stores it in 'token.txt'
