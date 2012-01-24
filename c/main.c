@@ -25,6 +25,12 @@ int main() {
 	// Error variable for server requests
 	char error[500];
 
+	// Arguments to the File Uploader Sync API call
+	// You can add multiple comma-separated values here
+	// This is equivalent to writing: id=154
+	char* arguments_keys[] = {"id"};
+	char* arguments_values[] = {"154"};
+	
 	/* Will use this variable to store the result of the
 	 * CoursePeer API method call.
 	 */
@@ -71,42 +77,69 @@ int main() {
 
     // User Profile
     printf("\n#########################\nUser Profile:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/profile", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/profile", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Courses
     printf("\n#########################\nUser Courses:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/courses", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/courses", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Questions
     printf("\n#########################\nUser Questions:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/questions", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/questions", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Bookmarks
     printf("\n#########################\nUser Bookmarks:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/bookmarks", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/bookmarks", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
 
     // User Tips
     printf("\n#########################\nUser Tips:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/tips", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/tips", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
     
     // User Life Activities/Places
     printf("\n#########################\nUser Life Activities/Places:\n");
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/life", returned_access_token, error, sizeof(error));
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/life", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
+    printf("\n%s\n\n", cp_method_result);
+    /* Clear result variable to use in next API call */
+    *cp_method_result = '\0';
+	
+	
+	// ############# FILE UPLOAD ############# //
+	
+    // Fetch User Uploaded Files
+    printf("\n#########################\nUser Files Archive:\n");
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
+    printf("\n%s\n\n", cp_method_result);
+    /* Clear result variable to use in next API call */
+    *cp_method_result = '\0';
+	
+	// Upload New File to User Archive
+	// Path of file is relative (same directory as the executable file). For Windows absolute path, remember to use double back slash (i.e. "C:\\blues.jpg").
+	// Linux OS doesn't require that.
+    printf("\n#########################\nUploading File to User Archive:\n");
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files", returned_access_token, error, sizeof(error), "blues.jpg", NULL, NULL, 0);
+    printf("\n%s\n\n", cp_method_result);
+    /* Clear result variable to use in next API call */
+    *cp_method_result = '\0';
+	
+	// Sync (overwrite) File to User Archive
+    printf("\n#########################\nSyncing (overwriting) File to User Archive:\n");
+	
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files", returned_access_token, error, sizeof(error), "blues.jpg", arguments_keys, arguments_values, 1);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';

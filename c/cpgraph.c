@@ -51,7 +51,7 @@ struct MemoryStruct {
 
 // 
 CURL *curl_handle; // cURL handler to do the connections
-
+CURLcode res;
 
 /* Function used as a callback for the cURL;
  * gets executed when it returns back from the call.
@@ -156,7 +156,7 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
 	/* send all data to this function  */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_memory_callback);
 	 
-	/* we pass our 'code' struct to the callback function */ 
+	/* we pass our 'access_token_response' struct to the callback function */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&access_token_response);
 	 
 	/* some servers don't like requests that are made without a user-agent
@@ -199,15 +199,38 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
     return 1;
 }
 
-int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len) {
+int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, char * upload, char * arguments_keys[], char * arguments_values[], int arguments_count) {
 	struct MemoryStruct call_result;
 	char cp_api_method_url[1000];
 	struct curl_httppost *post = NULL;
-
+	
+	// For file uploader
+	struct curl_httppost *last=NULL;
+	
+	// Counter Variable
+	int i=0;
+	
 	call_result.memory = malloc(1);  /* will be grown as needed by the realloc above */ 
     assert(call_result.memory);
 	call_result.size = 0;    /* no data at this point */ 
 
+	// If the request is uploading a file
+	if(upload){
+	  /* Fill in the file upload field */ 
+	   curl_formadd(&post, &last, 
+			CURLFORM_COPYNAME, "file",
+			CURLFORM_FILE, upload,
+			CURLFORM_END);
+	}
+
+	// Loop to get all arguments passed to be send to the API
+	for(i=0; i<arguments_count; i++){
+		curl_formadd(&post, &last, 
+			CURLFORM_COPYNAME, arguments_keys[i],
+			CURLFORM_COPYCONTENTS, arguments_values[i],
+			CURLFORM_END);
+	}
+	
 	curl_global_init(CURL_GLOBAL_ALL);
 	 
 	/* init the curl session */ 
@@ -216,7 +239,7 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
 	snprintf(cp_api_method_url, sizeof(cp_api_method_url), "%s%s%s%s", CP_METHOD_DATA_SERVER,
         method, CP_METHOD_DATA_ACCESS_TOKEN, access_token);
 	
-	/* specify URL to get authorization code */ 
+	/* specify URL to execute API method call */ 
 	curl_easy_setopt(curl_handle, CURLOPT_URL, cp_api_method_url);
 
 	/* Set the form info to POST (CoursePeer requires POST)*/
@@ -225,7 +248,7 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
 	/* send all data to this function  */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_memory_callback);
 	 
-	/* we pass our 'code' struct to the callback function */ 
+	/* we pass our 'call_result' struct to the callback function */ 
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *)&call_result);
 	 
 	/* some servers don't like requests that are made without a user-agent

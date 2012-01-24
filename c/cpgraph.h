@@ -27,6 +27,6 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
  * The result is stored in 'result'.
  * Returns 1 if failed, and 0 if success.
  */
-int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len);
+int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, char * upload, char * arguments_keys[], char * arguments_values[], int arguments_count);
 
 #endif
