@@ -28,8 +28,9 @@ int main() {
 	// Arguments to the File Uploader Sync API call
 	// You can add multiple comma-separated values here
 	// This is equivalent to writing: id=154
-	char* arguments_keys[] = {"id"};
-	char* arguments_values[] = {"154"};
+	char* argument_keys[] = {"id"};
+	char* argument_values[] = {"154"};
+    const int arg_count = 1;
 	
 	/* Will use this variable to store the result of the
 	 * CoursePeer API method call.
@@ -139,7 +140,8 @@ int main() {
 	// Sync (overwrite) File to User Archive
     printf("\n#########################\nSyncing (overwriting) File to User Archive:\n");
 	
-    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files", returned_access_token, error, sizeof(error), "blues.jpg", arguments_keys, arguments_values, 1);
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files", returned_access_token, error, sizeof(error), "blues.jpg",
+                  argument_keys, argument_values, arg_count);
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';

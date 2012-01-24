@@ -72,7 +72,8 @@ static size_t write_memory_callback(const void *contents, size_t size, size_t nm
 	return realsize;
 }
 
-int request_access_token(char *returned_access_token, size_t returned_access_token_len, const char *email, const char *password, char *error, size_t error_len)
+int request_access_token(char *returned_access_token, size_t returned_access_token_len,
+                         const char *email, const char *password, char *error, size_t error_len)
 {
 	// This function goes to the CoursePeer server, grabs a code
 	// then returns back, to resend it and get an access_token.
@@ -191,23 +192,24 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
     return 1;
 }
 
-int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, char * upload, char * arguments_keys[], char * arguments_values[], int arguments_count) {
+int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, 
+                  const char *upload, const char *arg_keys[], const char *arg_values[], int arg_count) {
 	struct MemoryStruct call_result;
 	char cp_api_method_url[1000];
 	struct curl_httppost *post = NULL;
 	
 	// For file uploader
-	struct curl_httppost *last=NULL;
+	struct curl_httppost *last = NULL;
 	
 	// Counter Variable
-	int i=0;
+	int i;
 	
 	call_result.memory = malloc(1);  /* will be grown as needed by the realloc above */ 
     assert(call_result.memory);
 	call_result.size = 0;    /* no data at this point */ 
 
 	// If the request is uploading a file
-	if(upload){
+	if (upload) {
 	  /* Fill in the file upload field */ 
 	   curl_formadd(&post, &last, 
 			CURLFORM_COPYNAME, "file",
@@ -216,10 +218,10 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
 	}
 
 	// Loop to get all arguments passed to be send to the API
-	for(i=0; i<arguments_count; i++){
+	for(i = 0; i < arg_count; ++i) {
 		curl_formadd(&post, &last, 
-			CURLFORM_COPYNAME, arguments_keys[i],
-			CURLFORM_COPYCONTENTS, arguments_values[i],
+			CURLFORM_COPYNAME, arg_keys[i],
+			CURLFORM_COPYCONTENTS, arg_values[i],
 			CURLFORM_END);
 	}
 	
@@ -258,18 +260,18 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
 	return 0;
 }
 
-void download_file(const char* url, const char* file_name){
+void download_file(const char* url, const char* file_name) {
   CURL* easyhandle;
   FILE* file;
   
   easyhandle = curl_easy_init();
-  curl_easy_setopt( easyhandle, CURLOPT_URL, url ) ;
+  curl_easy_setopt(easyhandle, CURLOPT_URL, url );
   
-  file = fopen( file_name, "wb");
+  file = fopen(file_name, "wb");
   
-  curl_easy_setopt( easyhandle, CURLOPT_WRITEDATA, file) ;
-  curl_easy_perform( easyhandle );
-  curl_easy_cleanup( easyhandle );
+  curl_easy_setopt(easyhandle, CURLOPT_WRITEDATA, file);
+  curl_easy_perform(easyhandle);
+  curl_easy_cleanup(easyhandle);
   
   fclose(file);
 }

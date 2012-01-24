@@ -19,7 +19,8 @@ static size_t write_memory_callback(const void *contents, size_t size, size_t nm
  * passed 'return_access_token' char array.
  * Returns 1 if failed, and 0 if success.
  */
-int request_access_token(char *returned_access_token, size_t returned_access_token_len, char *email, char *password, char *error, size_t error_len);
+int request_access_token(char *returned_access_token, size_t returned_access_token_len,
+                         const char *email, const char *password, char *error, size_t error_len);
 
 /* 
  * Executes the CoursePeer API Call for 
@@ -27,7 +28,8 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
  * The result is stored in 'result'.
  * Returns 1 if failed, and 0 if success.
  */
-int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, char * upload, char * arguments_keys[], char * arguments_values[], int arguments_count);
+int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len,
+                  const char *upload, const char *arg_keys[], const char *arg_values[], int arg_count);
 
 /* 
  * Download file from the web and store it
