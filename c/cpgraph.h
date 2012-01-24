@@ -35,6 +35,6 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
  * Download file from the web and store it
  * on the local machine of the user.
  */
-void download_file(const char* url, const char* file_name);
+void download_file(const char *url, const char *file_name);
 
 #endif
