@@ -265,7 +265,7 @@ void download_file(const char* url, const char* file_name) {
   FILE* file;
   
   easyhandle = curl_easy_init();
-  curl_easy_setopt(easyhandle, CURLOPT_URL, url );
+  curl_easy_setopt(easyhandle, CURLOPT_URL, url);
   
   file = fopen(file_name, "wb");
   
