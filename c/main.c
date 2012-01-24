@@ -143,6 +143,13 @@ int main() {
     printf("\n%s\n\n", cp_method_result);
     /* Clear result variable to use in next API call */
     *cp_method_result = '\0';
+	
+	// Download File from User Archive
+    printf("\n#########################\nDownloading File from User Archive to Local Machine:\n");
+	
+      download_file( "http:\/\/www.coursepeer.com\/attach\/attachments\/attach_98f13708210194c475687be6106a3b84_c08aa3f149f58db41b2df82510329540", "blues2.jpg" ) ;
+    printf("\n%s\n\n", "File Downloaded!");
+
 
 cleanup:
 	// Keep it clean!

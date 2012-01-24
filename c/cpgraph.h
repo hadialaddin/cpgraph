@@ -29,4 +29,10 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
  */
 int cp_api_method(char *result, size_t result_len, char *method, char *access_token, char *error, size_t error_len, char * upload, char * arguments_keys[], char * arguments_values[], int arguments_count);
 
+/* 
+ * Download file from the web and store it
+ * on the local machine of the user.
+ */
+void download_file(const char* url, const char* file_name);
+
 #endif

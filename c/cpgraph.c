@@ -53,9 +53,6 @@ struct MemoryStruct {
 CURL *curl_handle; // cURL handler to do the connections
 CURLcode res;
 
-/* Function used as a callback for the cURL;
- * gets executed when it returns back from the call.
- */
 static size_t write_memory_callback(const void *contents, size_t size, size_t nmemb, void *userp)
 {
 	const size_t realsize = size * nmemb;
@@ -74,12 +71,7 @@ static size_t write_memory_callback(const void *contents, size_t size, size_t nm
 
 	return realsize;
 }
- 
-/* 
- * Places the access_token value in the
- * passed return_access_token char array.
- * Returns 1 if failed, and 0 if succeeded.
- */
+
 int request_access_token(char *returned_access_token, size_t returned_access_token_len, const char *email, const char *password, char *error, size_t error_len)
 {
 	// This function goes to the CoursePeer server, grabs a code
@@ -264,4 +256,20 @@ int cp_api_method(char *result, size_t result_len, char *method, char *access_to
 	snprintf(result, result_len, call_result.memory);
 
 	return 0;
+}
+
+void download_file(const char* url, const char* file_name){
+  CURL* easyhandle;
+  FILE* file;
+  
+  easyhandle = curl_easy_init();
+  curl_easy_setopt( easyhandle, CURLOPT_URL, url ) ;
+  
+  file = fopen( file_name, "wb");
+  
+  curl_easy_setopt( easyhandle, CURLOPT_WRITEDATA, file) ;
+  curl_easy_perform( easyhandle );
+  curl_easy_cleanup( easyhandle );
+  
+  fclose(file);
 }
