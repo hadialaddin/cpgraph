@@ -12,7 +12,7 @@
 
 #include "cpgraph.h"
 
-int main() {
+int main(void) {
 	char returned_access_token[200];
 	int access_token_result;
 	
