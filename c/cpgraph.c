@@ -104,8 +104,7 @@ int request_access_token(char *returned_access_token, size_t returned_access_tok
 
 	snprintf(cp_code_url, sizeof(cp_code_url), "%s%s%s%s%s%s%s%s%s%s%s\n", CP_AUTHORIZE_SERVER, CP_REQUEST_CODE_URI_STARTER, CP_REQUEST_CODE_URI_CLIENTID,
         CP_APP_KEY, CP_REQUEST_CODE_URI_REDIRECT_URI, CP_APP_REDIRECT_URI, CP_REQUEST_CODE_URI_EMAIL, email, CP_REQUEST_CODE_URI_PASSWORD,
-        password, CP_REQUEST_CODE_URI_DESKTOP);
-	
+        curl_easy_escape(curl_handle, password, 0 ), CP_REQUEST_CODE_URI_DESKTOP);
     /* specify URL to get authorization code */
 	curl_easy_setopt(curl_handle, CURLOPT_URL, cp_code_url);
 	 
@@ -274,4 +273,38 @@ void download_file(const char* url, const char* file_name) {
   curl_easy_cleanup(easyhandle);
   
   fclose(file);
+}
+
+char* encode(unsigned char *string) { 
+        int escapecount; 
+        unsigned char *src, *dest; 
+        unsigned char *newstr; 
+         
+        char hextable[] = { '0', '1', '2', '3', '4', '5', '6', '7', 
+                            '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' }; 
+         
+        if (string == NULL) return NULL; 
+        escapecount = 0; 
+        for (src = string; *src != 0; src++) 
+                if (!isalnum(*src)) escapecount++; 
+         
+        /* new string length = 
+         * string length - chars that are encoded + 3bytes per encoded char + 
+         * one terminating NUL */ 
+        newstr = (char*)malloc(strlen(string) - escapecount + (escapecount * 3) + 1); 
+         
+        src = string; 
+        dest = newstr; 
+        while (*src != 0) { 
+                if (!isalnum(*src)) { 
+                        *dest++ = '%'; 
+                        *dest++ = hextable[*src / 16]; 
+                        *dest++ = hextable[*src % 16]; 
+                        src++; 
+                } else { 
+                        *dest++ = *src++; 
+                } 
+        } 
+        *dest = 0; 
+        return newstr; 
 }
