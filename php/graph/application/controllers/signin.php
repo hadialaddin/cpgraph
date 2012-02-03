@@ -161,7 +161,7 @@ class Signin extends CI_Controller {
 		{
 			// No authorise code or error code redirect them for trying to be a fool
 			$this->load->helper('url');
-			redirect(site_url() . 'signin');
+			redirect(site_url() . '/oauth/sign_in');
 		}
 	}
 
