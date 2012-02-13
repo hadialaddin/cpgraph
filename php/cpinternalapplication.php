@@ -7,7 +7,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>CoursePeer Sample Application</title>
+    <title>CoursePeer Sample Internal (iFrame) Application</title>
     <meta name="description" content="">
     <meta name="author" content="">
 
@@ -120,8 +120,7 @@
 				foreach($result as $courseid=>$coursename)
 					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursename)."><b>".$coursename."</b></a><br /><br />";
 			?>
-          </div>
-          <div class="span4">
+			
 			Your CoursePeer Profile data:<br />
             <h3><?php echo $_SESSION['cp_name']; ?></h3>
 			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
@@ -155,8 +154,7 @@
 				foreach($result as $courseid=>$coursename)
 					echo "<a class=\"btn primary\" href=\"#\"><b>".$coursename."</b></a><br /><br />";
 			?>
-          </div>
-          <div class="span4">
+			
 			Your CoursePeer Profile data:<br />
             <h3><?php echo $_SESSION['cp_name']; ?></h3>
 			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
@@ -182,10 +180,10 @@
 					  <p><strong>Ooops!</strong> You need to authorize our CoursePeer application in order to be able to use the features of this site.</p>
 					</div>
 					<?php } ?>
-					<h2>Welcome to CoursePeer Sample Application</h2><br />
+					<h2>Welcome to CoursePeer Sample Internal (iFrame) Application</h2><br />
 					<br /><br />
 					Our application is fully connected and integrated with CoursePeer, the social academic and professional career development platform.
-					<br /><br /><br /><a href="graph/index.php/signin"><img border=no src="http://graph.coursepeer.com/images/cp_login.png"></img></a>
+					<br /><br /><br /><a href="graph/index.php/signin?internaltoken=<?php echo $_SESSION['internaltoken']; ?>"><img border=no src="http://graph.coursepeer.com/images/cp_login.png"></img></a>
 				  </div>
 				</div>
 			  </div>
