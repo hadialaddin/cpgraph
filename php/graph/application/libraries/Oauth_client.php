@@ -52,8 +52,11 @@ class Oauth_client {
 			$state = implode('&', $states);
 			//$state = urlencode($state);
 		}
-		
-		redirect($this->ci->config->item('oauth_signin_url') ."&". $state);
+		if($this->ci->input->get('internaltoken')){
+			redirect($this->ci->config->item('oauth_signin_url') ."&". $state . "&internaltoken=" . $this->ci->input->get('internaltoken'));
+		}
+		else
+			redirect($this->ci->config->item('oauth_signin_url') ."&". $state);
 	}
 	
 	/**

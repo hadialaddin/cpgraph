@@ -62,7 +62,11 @@ class Signin extends CI_Controller {
 		// If there was a problem with the auth server or the user declined your application there will be an error
 		if ($this->input->get('error'))
 		{
-			header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH).'?error='.$this->input->get('error'));
+			if($this->input->get('internalapp')=='1')
+				header('Location: '.(CP_INTERNAL_APP_PATH==''?'/':CP_INTERNAL_APP_PATH).'?error='.$this->input->get('error'));
+			else
+				header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH).'?error='.$this->input->get('error'));
+			
 		}
 						
 		elseif ($this->input->get('code'))
@@ -126,7 +130,10 @@ class Signin extends CI_Controller {
 					foreach ($query->result() as $user){
 						$_SESSION['userid']=$user->userid;
 					}
-					header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH));
+					if($this->input->get('internalapp')=='1')
+						header('Location: '.(CP_INTERNAL_APP_PATH==''?'/':CP_INTERNAL_APP_PATH));
+					else
+						header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH));
 				}
 				
 				else
@@ -145,7 +152,10 @@ class Signin extends CI_Controller {
 					$_SESSION['cp_campus']=$cp_profile['campus'];
 					$_SESSION['cp_major']=$cp_profile['major'];
 					$_SESSION['userid']=$this->db->insert_id();
-					header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH));
+					if($this->input->get('internalapp')=='1')
+						header('Location: '.(CP_INTERNAL_APP_PATH==''?'/':CP_INTERNAL_APP_PATH));
+					else
+						header('Location: '.(CP_APP_PATH==''?'/':CP_APP_PATH));
 					
 				}
 			}

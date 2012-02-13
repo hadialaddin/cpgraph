@@ -19,6 +19,12 @@ define('CP_APP_PATH','#########'); 			/* Replace ######### with the full path (i
 											   '/demoapp/another_folder/another'. If files are hosted at 'root' (files reside on the 'www' domain folder),
 											   then leave this constant empty (i.e. the '#########' becomes '').
 											 */
+define('CP_INTERNAL_APP_PATH','#########'); /* Replace ######### with the full path (if any), ALWAYS starting with a leading forward slash '/', where
+										   	   the Internal Application (iFrame) page resides. Eg. If that page is hosted at:
+											   'http://www.yourdomain.com/demoapp/another_folder/another/cpinternalapplication.php', then the '#########' becomes:
+											   '/demoapp/another_folder/another/cpinternalapplication.php'. If files are hosted at 'root' (files reside on the 'www' 
+											   domain folder), then leave this constant empty (i.e. the '#########' becomes '').
+											 */
 define('DB_HOST','#########'); 				// Replace ######### with your database server host or IP address (usually '127.0.0.1').
 define('DB_USERNAME','#########'); 			// Replace ######### with your database's username.
 define('DB_PASSWORD','#########'); 			// Replace ######### with your database's password.
