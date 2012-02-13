@@ -1,10 +1,6 @@
 <?php
 	session_start();
 	include("include/RestRequest.inc.php");
-	if($_GET['internaltoken']!=""){
-		$_SESSION['internaltoken']=$_GET['internaltoken'];
-		header('Location: graph/index.php/signin?internaltoken='.$_GET['internaltoken']);
-	}
 ?>
 
 <!DOCTYPE html>
