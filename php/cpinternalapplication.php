@@ -184,7 +184,7 @@
 					<h2>Welcome to CoursePeer Sample Internal (iFrame) Application</h2><br />
 					<br /><br />
 					Our application is fully connected and integrated with CoursePeer, the social academic and professional career development platform.
-					<br /><br /><br /><a href="graph/index.php/signin?internaltoken=<?php echo $_SESSION['internaltoken']; ?>"><img border=no src="http://graph.coursepeer.com/images/cp_login.png"></img></a>
+					<br /><br /><br /><a href="graph/index.php/signin?internaltoken=<?php echo $_SESSION['internaltoken']; ?>"><h3>Install Application</h3></a>
 				  </div>
 				</div>
 			  </div>
