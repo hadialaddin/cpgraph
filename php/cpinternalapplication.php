@@ -93,9 +93,6 @@
       <div class="fill">
         <div class="container">
           <a class="brand" href="./">CoursePeer</a>
-          <div class="pull-right">
-            <?php if(isset($_SESSION['userid'])){ ?><a href="graph/index.php/signin/signout"><img border=no src="http://graph.coursepeer.com/images/cp_logout.png"></img></a> <?php } ?>
-          </div>
         </div>
       </div>
     </div>
