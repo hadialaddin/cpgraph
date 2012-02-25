@@ -117,9 +117,8 @@
 				$cp_request->buildPostBody(array());
 				$cp_request->execute();
 				$result = $cp_request->getResponseBody();
-				foreach($result as $courseid=>$coursename)
-					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursename)."><b>".$coursename."</b></a><br /><br />";
-			?>
+				foreach($result as $courseid=>$coursedetails)
+					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";			?>
           </div>
           <div class="span4">
 			Your CoursePeer Profile data:<br />
@@ -152,8 +151,8 @@
 				$cp_request->buildPostBody(array());
 				$cp_request->execute();
 				$result = $cp_request->getResponseBody();
-				foreach($result as $courseid=>$coursename)
-					echo "<a class=\"btn primary\" href=\"#\"><b>".$coursename."</b></a><br /><br />";
+				foreach($result as $courseid=>$coursedetails)
+					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";
 			?>
           </div>
           <div class="span4">
