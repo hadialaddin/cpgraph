@@ -150,6 +150,13 @@ int main(void) {
     printf("\n#########################\nDownloading File from User Archive to Local Machine:\n");
 	download_file( "http://www.coursepeer.com/attach/attachments/attach_98f13708210194c475687be6106a3b84_c08aa3f149f58db41b2df82510329540", "blues2.jpg" ) ;
     printf("\n%s\n\n", "File Downloaded!");
+    
+    // Delete File from User Archive
+    printf("\n#########################\nDelete File from User Archive:\n");
+    cp_api_method(cp_method_result, CP_METHOD_RESULT_LEN, "/users/me/files/999/delete", returned_access_token, error, sizeof(error), NULL, NULL, NULL, 0);
+    printf("\n%s\n\n", cp_method_result);
+    /* Clear result variable to use in next API call */
+    *cp_method_result = '\0';
 
 
 cleanup:
