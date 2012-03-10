@@ -1,8 +1,7 @@
 <?php
 	session_start();
 	include("include/RestRequest.inc.php");
-	include("include/config.inc.php");
-	
+
 	if(isset($_SESSION['cp_access_token'])){
 		$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/oauth/verify_access_token?access_token='.$_SESSION['cp_access_token'],'POST');
 		$cp_request->buildPostBody(array());
