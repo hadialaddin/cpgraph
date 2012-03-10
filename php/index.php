@@ -1,6 +1,25 @@
 <?php
 	session_start();
 	include("include/RestRequest.inc.php");
+	include("include/config.inc.php");
+	
+	if(isset($_SESSION['cp_access_token'])){
+		$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/oauth/verify_access_token?access_token='.$_SESSION['cp_access_token'],'POST');
+		$cp_request->buildPostBody(array());
+		$cp_request->execute();
+		$result = $cp_request->getResponseBody();
+		if($result['type']=='external'){
+			// access_token found
+			$cp_loggedin = 1;
+		}
+		else{
+			// access_token not found
+			$cp_loggedin = 0;
+		}
+	}
+	else{
+		$cp_loggedin = 0;
+	}
 ?>
 
 <!DOCTYPE html>
@@ -90,7 +109,7 @@
         <div class="container">
           <a class="brand" href="./">CoursePeer</a>
           <div class="pull-right">
-            <?php if(isset($_SESSION['userid'])){ ?><a href="graph/index.php/signin/signout"><img border=no src="http://graph.coursepeer.com/images/cp_logout.png"></img></a> <?php } ?>
+			<?php if($cp_loggedin==1){ ?><a href="graph/index.php/signin/signout"><img border=no src="http://graph.coursepeer.com/images/cp_logout.png"></img></a> <?php } ?>
           </div>
         </div>
       </div>
@@ -99,7 +118,7 @@
     <div class="container">
 
 	<?php
-		if($_SESSION['cp_usertype']=='Student'){ // CoursePeer Usertype is 'Student'
+		if($_SESSION['cp_usertype']=='Student' && $cp_loggedin==1){ // CoursePeer Usertype is 'Student'
 	?>
       <div class="content">
         <div class="page-header">
@@ -118,11 +137,12 @@
 				$cp_request->execute();
 				$result = $cp_request->getResponseBody();
 				foreach($result as $courseid=>$coursedetails)
-					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";			?>
-          </div>
+					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";
+			?>
+			</div>
           <div class="span4">
 			Your CoursePeer Profile data:<br />
-            <h3><?php echo $_SESSION['cp_name']; ?></h3>
+			<h3><?php echo $_SESSION['cp_name']; ?></h3>
 			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
 			<h6><?php echo $_SESSION['cp_usertype']; ?></h6>
 			<h5><?php echo $_SESSION['cp_major']; ?></h5>
@@ -133,7 +153,7 @@
       </div>
 	<?php
 		}
-		elseif($_SESSION['cp_usertype']=='Instructor'){ // CoursePeer Usertype is 'Instructor'
+		elseif($_SESSION['cp_usertype']=='Instructor' && $cp_loggedin==1){ // CoursePeer Usertype is 'Instructor'
 	?>
       <div class="content">
         <div class="page-header">

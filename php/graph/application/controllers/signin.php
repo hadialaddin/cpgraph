@@ -47,11 +47,8 @@ class Signin extends CI_Controller {
 	
 	function signout()
 	{
-		$this->load->library('oauth_client');
-		$this->session->sess_destroy();
 		session_start();
-		$_SESSION=array();
-		session_destroy();
+		unset($_SESSION['cp_access_token']);
 		$this->oauth_client->sign_out();
 	}
 	
@@ -115,10 +112,14 @@ class Signin extends CI_Controller {
 				if ($user_exists>0)
 				{
 					// The user exists already, update access_token
-					$this->db->query("UPDATE cpapp_users SET cp_access_token='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
+					$this->db->query("UPDATE cpapp_users SET ".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token")."='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
-					$_SESSION['cp_access_token']=$access_token;
+					if($this->input->get('internalapp')=='1')
+						$_SESSION['cp_internal_access_token']=$access_token;
+					else
+						$_SESSION['cp_access_token']=$access_token;
+						
 					$_SESSION['cp_userid']=$cp_profile['user_id'];
 					$_SESSION['cp_name']=$cp_profile['name'];
 					$_SESSION['cp_usertype']=$cp_profile['user_type'];
@@ -139,10 +140,14 @@ class Signin extends CI_Controller {
 				else
 				{
 					// Insert the user's details into your app's database (most importantly, the access token)
-					$this->db->query("INSERT INTO cpapp_users (cpuserid,cp_access_token,name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
+					$this->db->query("INSERT INTO cpapp_users (cpuserid,".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token").",name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
-					$_SESSION['cp_access_token']=$access_token;
+					if($this->input->get('internalapp')=='1')
+						$_SESSION['cp_internal_access_token']=$access_token;
+					else
+						$_SESSION['cp_access_token']=$access_token;
+						
 					$_SESSION['cp_userid']=$cp_profile['user_id'];
 					$_SESSION['cp_name']=$cp_profile['name'];
 					$_SESSION['cp_usertype']=$cp_profile['user_type'];

@@ -1,9 +1,28 @@
 <?php
 	session_start();
 	include("include/RestRequest.inc.php");
-	if($_GET['internaltoken']!=""){
+	include("include/config.inc.php");
+	if(isset($_GET['internaltoken'])){
 		$_SESSION['internaltoken']=$_GET['internaltoken'];
 		header('Location: graph/index.php/signin?internaltoken='.$_GET['internaltoken']);
+	}
+	
+	if(isset($_SESSION['cp_internal_access_token'])){
+		$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/oauth/verify_access_token?access_token='.$_SESSION['cp_internal_access_token'],'POST');
+		$cp_request->buildPostBody(array());
+		$cp_request->execute();
+		$result = $cp_request->getResponseBody();
+		if($result['type']=='internal'){
+			// access_token found
+			$cp_loggedin = 1;
+		}
+		else{
+			// access_token not found
+			$cp_loggedin = 0;
+		}
+	}
+	else{
+		$cp_loggedin = 0;
 	}
 ?>
 
@@ -92,7 +111,7 @@
     <div class="topbar">
       <div class="fill">
         <div class="container">
-          <a class="brand" href="./">CoursePeer</a>
+          <a class="brand" href="./index_internal.php">CoursePeer</a>
         </div>
       </div>
     </div>
@@ -100,7 +119,7 @@
     <div class="container">
 
 	<?php
-		if($_SESSION['cp_usertype']=='Student'){ // CoursePeer Usertype is 'Student'
+		if($_SESSION['cp_usertype']=='Student' && $cp_loggedin==1){ // CoursePeer Usertype is 'Student'
 	?>
       <div class="content">
         <div class="page-header">
@@ -114,27 +133,19 @@
 			The following are your courses, as listed on your CoursePeer account: <br /><br />
 
 			<?php
-				$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/data/users/me/courses?access_token='.$_SESSION['cp_access_token'],'POST');
+				$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/data/users/me/courses?access_token='.$_SESSION['cp_internal_access_token'],'POST');
 				$cp_request->buildPostBody(array());
 				$cp_request->execute();
 				$result = $cp_request->getResponseBody();
-				foreach($result as $courseid=>$coursename)
-					echo "<a class=\"btn primary\" href=lectures.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursename)."><b>".$coursename."</b></a><br /><br />";
+				foreach($result as $courseid=>$coursedetails)
+					echo "<a class=\"btn primary\" href=lectures_internal.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";
 			?>
-			
-			Your CoursePeer Profile data:<br />
-            <h3><?php echo $_SESSION['cp_name']; ?></h3>
-			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
-			<h6><?php echo $_SESSION['cp_usertype']; ?></h6>
-			<h5><?php echo $_SESSION['cp_major']; ?></h5>
-			<h5><?php echo $_SESSION['cp_school'].", ".$_SESSION['cp_campus']; ?></h5>
-			<h4><?php echo $_SESSION['cp_homecountry']; ?></h4><br />
           </div>
         </div>
       </div>
 	<?php
 		}
-		elseif($_SESSION['cp_usertype']=='Instructor'){ // CoursePeer Usertype is 'Instructor'
+		elseif($_SESSION['cp_usertype']=='Instructor' && $cp_loggedin==1){ // CoursePeer Usertype is 'Instructor'
 	?>
       <div class="content">
         <div class="page-header">
@@ -148,21 +159,13 @@
 			The following are your courses, as listed on your CoursePeer account: <br /><br />
 
 			<?php
-				$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/data/users/me/courses?access_token='.$_SESSION['cp_access_token'],'POST');
+				$cp_request = new RestRequest('http://graph.coursepeer.com/index.php/data/users/me/courses?access_token='.$_SESSION['cp_internal_access_token'],'POST');
 				$cp_request->buildPostBody(array());
 				$cp_request->execute();
 				$result = $cp_request->getResponseBody();
-				foreach($result as $courseid=>$coursename)
-					echo "<a class=\"btn primary\" href=\"#\"><b>".$coursename."</b></a><br /><br />";
+				foreach($result as $courseid=>$coursedetails)
+					echo "<a class=\"btn primary\" href=lectures_internal.php?action=show&courseid=".$courseid."&coursename=".urlencode($coursedetails['course_code'].":".$coursedetails['course_name'])."><b>".$coursedetails['course_code'].":".$coursedetails['course_name']."</b></a><br /><br />";
 			?>
-			
-			Your CoursePeer Profile data:<br />
-            <h3><?php echo $_SESSION['cp_name']; ?></h3>
-			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
-			<h6><?php echo $_SESSION['cp_usertype']; ?></h6>
-			<h5><?php echo $_SESSION['cp_major']; ?></h5>
-			<h5><?php echo $_SESSION['cp_school'].", ".$_SESSION['cp_campus']; ?></h5>
-			<h4><?php echo $_SESSION['cp_homecountry']; ?></h4><br />
           </div>
         </div>
       </div>
