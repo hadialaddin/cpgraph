@@ -1,4 +1,5 @@
 <?php
+	// Note: variables used in the internal version here are for the "internal" token, thus starting with "cp_internal_".
 	session_start();
 	include("include/RestRequest.inc.php");
 	
