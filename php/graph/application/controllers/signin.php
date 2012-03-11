@@ -108,12 +108,12 @@ class Signin extends CI_Controller {
 				$cp_profile = $this->rest->post('index.php/data/users/me/profile?access_token='.$access_token,array());
 				
 				// Check against your own database of the application whether the user is new or not
-				$query = $this->db->query("SELECT userid FROM mepeer_users WHERE cpuserid=".$cp_profile['user_id'], FALSE);
+				$query = $this->db->query("SELECT userid FROM cpapp_users WHERE cpuserid=".$cp_profile['user_id'], FALSE);
 				$user_exists = $query->num_rows();
 				if ($user_exists>0)
 				{
 					// The user exists already, update access_token
-					$this->db->query("UPDATE mepeer_users SET ".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token")."='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
+					$this->db->query("UPDATE cpapp_users SET ".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token")."='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
 					if($this->input->get('internalapp')=='1'){
@@ -155,7 +155,7 @@ class Signin extends CI_Controller {
 				else
 				{
 					// Insert the user's details into your app's database (most importantly, the access token)
-					$this->db->query("INSERT INTO mepeer_users (cpuserid,".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token").",name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
+					$this->db->query("INSERT INTO cpapp_users (cpuserid,".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token").",name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
 					if($this->input->get('internalapp')=='1'){
