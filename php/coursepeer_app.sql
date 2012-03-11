@@ -7,8 +7,8 @@
 CREATE TABLE IF NOT EXISTS `cpapp_users` (
   `userid` int(11) NOT NULL AUTO_INCREMENT,
   `cpuserid` int(11) NOT NULL,
-  `cp_access_token` varchar(500) NOT NULL,
-  `cp_internal_access_token` varchar(500) NOT NULL,
+  `cp_access_token` varchar(500),
+  `cp_internal_access_token` varchar(500),
   `name` varchar(500) NOT NULL,
   `usertype` int(11) NOT NULL,
   PRIMARY KEY (`userid`)
