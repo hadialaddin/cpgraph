@@ -119,7 +119,7 @@
     <div class="container">
 
 	<?php
-		if($_SESSION['cp_usertype']=='Student' && $cp_loggedin==1){ // CoursePeer Usertype is 'Student'
+		if($_SESSION['cp_internal_usertype']=='Student' && $cp_loggedin==1){ // CoursePeer Usertype is 'Student'
 	?>
       <div class="content">
         <div class="page-header">
@@ -127,7 +127,7 @@
         </div>
         <div class="row">
           <div class="span10">
-            <h2>Hi, <?php echo $_SESSION['cp_name']; ?>!</h2><br />
+            <h2>Hi, <?php echo $_SESSION['cp_internal_name']; ?>!</h2><br />
 			This is a demo.<br /><br />
 			
 			The following are your courses, as listed on your CoursePeer account: <br /><br />
@@ -145,7 +145,7 @@
       </div>
 	<?php
 		}
-		elseif($_SESSION['cp_usertype']=='Instructor' && $cp_loggedin==1){ // CoursePeer Usertype is 'Instructor'
+		elseif($_SESSION['cp_internal_usertype']=='Instructor' && $cp_loggedin==1){ // CoursePeer Usertype is 'Instructor'
 	?>
       <div class="content">
         <div class="page-header">
@@ -153,7 +153,7 @@
         </div>
         <div class="row">
           <div class="span10">
-            <h2>Hi, <?php echo $_SESSION['cp_name']; ?>!</h2><br />
+            <h2>Hi, <?php echo $_SESSION['cp_internal_name']; ?>!</h2><br />
 			This is a demo.<br /><br />
 			
 			The following are your courses, as listed on your CoursePeer account: <br /><br />
@@ -180,7 +180,7 @@
 				  <div class="span10">
 				  <?php if(isset($_GET['error'])){ ?>
 					<div class="alert-message error">
-					  <a class="close" href="#">×</a>
+					  <a class="close" href="#">ï¿½</a>
 					  <p><strong>Ooops!</strong> You need to authorize our CoursePeer application in order to be able to use the features of this site.</p>
 					</div>
 					<?php } ?>
