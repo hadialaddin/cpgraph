@@ -47,6 +47,7 @@ class Signin extends CI_Controller {
 	
 	function signout()
 	{
+
 		session_start();
 		unset($_SESSION['cp_access_token']);
 		$this->oauth_client->sign_out();
@@ -107,30 +108,44 @@ class Signin extends CI_Controller {
 				$cp_profile = $this->rest->post('index.php/data/users/me/profile?access_token='.$access_token,array());
 				
 				// Check against your own database of the application whether the user is new or not
-				$query = $this->db->query("SELECT userid FROM cpapp_users WHERE cpuserid=".$cp_profile['user_id'], FALSE);
+				$query = $this->db->query("SELECT userid FROM mepeer_users WHERE cpuserid=".$cp_profile['user_id'], FALSE);
 				$user_exists = $query->num_rows();
 				if ($user_exists>0)
 				{
 					// The user exists already, update access_token
-					$this->db->query("UPDATE cpapp_users SET ".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token")."='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
+					$this->db->query("UPDATE mepeer_users SET ".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token")."='".$access_token."' WHERE cpuserid=".$cp_profile['user_id'], FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
-					if($this->input->get('internalapp')=='1')
+					if($this->input->get('internalapp')=='1'){
 						$_SESSION['cp_internal_access_token']=$access_token;
-					else
-						$_SESSION['cp_access_token']=$access_token;
-						
-					$_SESSION['cp_userid']=$cp_profile['user_id'];
-					$_SESSION['cp_name']=$cp_profile['name'];
-					$_SESSION['cp_usertype']=$cp_profile['user_type'];
-					$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
-					$_SESSION['cp_homecountry']=$cp_profile['home_country'];
-					$_SESSION['cp_school']=$cp_profile['school'];
-					$_SESSION['cp_campus']=$cp_profile['campus'];
-					$_SESSION['cp_major']=$cp_profile['major'];
-					foreach ($query->result() as $user){
-						$_SESSION['userid']=$user->userid;
+						$_SESSION['cp_internal_userid']=$cp_profile['user_id'];
+						$_SESSION['cp_internal_name']=$cp_profile['name'];
+						$_SESSION['cp_internal_usertype']=$cp_profile['user_type'];
+						$_SESSION['cp_internal_profile_photo_url']=$cp_profile['profile_photo_url'];
+						$_SESSION['cp_internal_homecountry']=$cp_profile['home_country'];
+						$_SESSION['cp_internal_school']=$cp_profile['school'];
+						$_SESSION['cp_internal_campus']=$cp_profile['campus'];
+						$_SESSION['cp_internal_major']=$cp_profile['major'];
+						foreach ($query->result() as $user){
+							$_SESSION['internal_userid']=$user->userid;
+						}
 					}
+					else{
+						$_SESSION['cp_access_token']=$access_token;
+						$_SESSION['cp_userid']=$cp_profile['user_id'];
+						$_SESSION['cp_name']=$cp_profile['name'];
+						$_SESSION['cp_usertype']=$cp_profile['user_type'];
+						$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
+						$_SESSION['cp_homecountry']=$cp_profile['home_country'];
+						$_SESSION['cp_school']=$cp_profile['school'];
+						$_SESSION['cp_campus']=$cp_profile['campus'];
+						$_SESSION['cp_major']=$cp_profile['major'];
+						foreach ($query->result() as $user){
+							$_SESSION['userid']=$user->userid;
+						}
+
+					}
+
 					if($this->input->get('internalapp')=='1')
 						header('Location: '.(CP_INTERNAL_APP_PATH==''?'/':CP_INTERNAL_APP_PATH));
 					else
@@ -140,23 +155,34 @@ class Signin extends CI_Controller {
 				else
 				{
 					// Insert the user's details into your app's database (most importantly, the access token)
-					$this->db->query("INSERT INTO cpapp_users (cpuserid,".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token").",name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
+					$this->db->query("INSERT INTO mepeer_users (cpuserid,".($this->input->get('internalapp')==1?"cp_internal_access_token":"cp_access_token").",name,usertype) VALUES (".$cp_profile['user_id'].",'".$access_token."','".$cp_profile['name']."',".($cp_profile['user_type']=="Student"?1:2).")", FALSE);
 					// Set up their sessions and redirect them to the app
 					session_start();
-					if($this->input->get('internalapp')=='1')
+					if($this->input->get('internalapp')=='1'){
 						$_SESSION['cp_internal_access_token']=$access_token;
-					else
+						$_SESSION['cp_internal_userid']=$cp_profile['user_id'];
+						$_SESSION['cp_internal_name']=$cp_profile['name'];
+						$_SESSION['cp_internal_usertype']=$cp_profile['user_type'];
+						$_SESSION['cp_internal_profile_photo_url']=$cp_profile['profile_photo_url'];
+						$_SESSION['cp_internal_homecountry']=$cp_profile['home_country'];
+						$_SESSION['cp_internal_school']=$cp_profile['school'];
+						$_SESSION['cp_internal_campus']=$cp_profile['campus'];
+						$_SESSION['cp_internal_major']=$cp_profile['major'];
+						$_SESSION['internal_userid']=$this->db->insert_id();
+					}
+					else{
 						$_SESSION['cp_access_token']=$access_token;
-						
-					$_SESSION['cp_userid']=$cp_profile['user_id'];
-					$_SESSION['cp_name']=$cp_profile['name'];
-					$_SESSION['cp_usertype']=$cp_profile['user_type'];
-					$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
-					$_SESSION['cp_homecountry']=$cp_profile['home_country'];
-					$_SESSION['cp_school']=$cp_profile['school'];
-					$_SESSION['cp_campus']=$cp_profile['campus'];
-					$_SESSION['cp_major']=$cp_profile['major'];
-					$_SESSION['userid']=$this->db->insert_id();
+						$_SESSION['cp_userid']=$cp_profile['user_id'];
+						$_SESSION['cp_name']=$cp_profile['name'];
+						$_SESSION['cp_usertype']=$cp_profile['user_type'];
+						$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
+						$_SESSION['cp_homecountry']=$cp_profile['home_country'];
+						$_SESSION['cp_school']=$cp_profile['school'];
+						$_SESSION['cp_campus']=$cp_profile['campus'];
+						$_SESSION['cp_major']=$cp_profile['major'];
+						$_SESSION['internal_userid']=$this->db->insert_id();
+					}
+					
 					if($this->input->get('internalapp')=='1')
 						header('Location: '.(CP_INTERNAL_APP_PATH==''?'/':CP_INTERNAL_APP_PATH));
 					else
