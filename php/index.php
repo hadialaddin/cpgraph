@@ -145,7 +145,6 @@
 			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
 			<h6><?php echo $_SESSION['cp_usertype']; ?></h6>
 			<h5><?php echo $_SESSION['cp_major']; ?></h5>
-			<h5><?php echo $_SESSION['cp_school'].", ".$_SESSION['cp_campus']; ?></h5>
 			<h4><?php echo $_SESSION['cp_homecountry']; ?></h4><br />
           </div>
         </div>
@@ -180,7 +179,6 @@
 			<img border=no src="<?php echo $_SESSION['cp_profile_photo_url']; ?>" height=50 width=50></img><br />
 			<h6><?php echo $_SESSION['cp_usertype']; ?></h6>
 			<h5><?php echo $_SESSION['cp_major']; ?></h5>
-			<h5><?php echo $_SESSION['cp_school'].", ".$_SESSION['cp_campus']; ?></h5>
 			<h4><?php echo $_SESSION['cp_homecountry']; ?></h4><br />
           </div>
         </div>
@@ -196,7 +194,7 @@
 				  <div class="span10">
 				  <?php if(isset($_GET['error'])){ ?>
 					<div class="alert-message error">
-					  <a class="close" href="#">×</a>
+					  <a class="close" href="#">ï¿½</a>
 					  <p><strong>Ooops!</strong> You need to authorize our CoursePeer application in order to be able to use the features of this site.</p>
 					</div>
 					<?php } ?>
