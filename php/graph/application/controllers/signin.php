@@ -124,7 +124,6 @@ class Signin extends CI_Controller {
 						$_SESSION['cp_internal_profile_photo_url']=$cp_profile['profile_photo_url'];
 						$_SESSION['cp_internal_homecountry']=$cp_profile['home_country'];
 						$_SESSION['cp_internal_school']=$cp_profile['school'];
-						$_SESSION['cp_internal_campus']=$cp_profile['campus'];
 						$_SESSION['cp_internal_major']=$cp_profile['major'];
 						foreach ($query->result() as $user){
 							$_SESSION['internal_userid']=$user->userid;
@@ -138,7 +137,6 @@ class Signin extends CI_Controller {
 						$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
 						$_SESSION['cp_homecountry']=$cp_profile['home_country'];
 						$_SESSION['cp_school']=$cp_profile['school'];
-						$_SESSION['cp_campus']=$cp_profile['campus'];
 						$_SESSION['cp_major']=$cp_profile['major'];
 						foreach ($query->result() as $user){
 							$_SESSION['userid']=$user->userid;
@@ -166,7 +164,6 @@ class Signin extends CI_Controller {
 						$_SESSION['cp_internal_profile_photo_url']=$cp_profile['profile_photo_url'];
 						$_SESSION['cp_internal_homecountry']=$cp_profile['home_country'];
 						$_SESSION['cp_internal_school']=$cp_profile['school'];
-						$_SESSION['cp_internal_campus']=$cp_profile['campus'];
 						$_SESSION['cp_internal_major']=$cp_profile['major'];
 						$_SESSION['internal_userid']=$this->db->insert_id();
 					}
@@ -178,7 +175,6 @@ class Signin extends CI_Controller {
 						$_SESSION['cp_profile_photo_url']=$cp_profile['profile_photo_url'];
 						$_SESSION['cp_homecountry']=$cp_profile['home_country'];
 						$_SESSION['cp_school']=$cp_profile['school'];
-						$_SESSION['cp_campus']=$cp_profile['campus'];
 						$_SESSION['cp_major']=$cp_profile['major'];
 						$_SESSION['internal_userid']=$this->db->insert_id();
 					}
